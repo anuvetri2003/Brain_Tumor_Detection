@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brain Tumor Detection</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Times New Roman', Times, serif;
+    color:white;
+    overflow:hidden;
+}
+
+/* NAVBAR */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    padding:18px 40px;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(12px);
+    display:flex;
+    gap:30px;
+    z-index:1000;
+}
+
+.navbar a{
+    color:white;
+    text-decoration:none;
+    font-size:17px;
+    position:relative;
+    transition:0.3s;
+}
+
+.navbar a:hover{
+    color:#00c3ff;
+}
+
+/* Background */
+#bgVideo{
+    position:fixed;
+    min-width:100%;
+    min-height:100%;
+    object-fit:cover;
+    z-index:-2;
+    filter:blur(2px) brightness(0.6);
+}
+
+/* Square Glass Box */
+.glass-container{
+    position:absolute;
+    top:55%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:750px;
+    min-height:450px;   /* makes it square feel */
+    padding:50px;
+    text-align:center;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.glass-container h1{
+    font-size:36px;
+}
+
+.subtitle{
+    margin-top:20px;
+    line-height:1.6;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:5px;
+    padding:5px 5px;
+    border:2px solid white;
+    border-radius:25px;
+    color:white;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:white;
+    color:black;
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/detection">Detection</a>
+    <a href="/database">Database</a>
+    <a href="https://en.wikipedia.org/wiki/Brain_tumor" target="_blank">About</a>
+</nav>
+
+<video autoplay muted loop id="bgVideo">
+<source src="https://cdn.pixabay.com/video/2022/03/17/111083-689949754_large.mp4" type="video/mp4">
+</video>
+
+<div class="glass-container">
+<h1>BRAIN TUMOR DETECTION</h1>
+<p class="subtitle">
+    Brain tumors are abnormal growths of cells in the brain that can affect vital
+    functions such as memory, movement, and speech. Early and accurate detection
+    plays a crucial role in improving patient outcomes and survival rates.
+    Advances in artificial intelligence have enabled faster and more reliable
+    analysis of medical images. This system uses AI-based techniques to identify
+    tumor regions with high precision. By supporting early diagnosis, the model
+    assists doctors in planning timely and effective treatment. Such technology
+    has the potential to enhance clinical decision-making and patient care.
+</p>
+
+<a href="{{ url_for('detection') }}" class="btn">Start Detection</a>
+</div>
+
+</body>
+</html>

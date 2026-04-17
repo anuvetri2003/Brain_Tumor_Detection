@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Patient Details</title>
+
+<style>
+body{
+    font-family: 'Times New Roman', Times, serif;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    margin:0;
+    padding:0;
+    color:white;
+}
+
+/* NAVBAR */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    padding:15px 40px;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(10px);
+    display:flex;
+    gap:30px;
+    z-index:1000;
+    box-sizing:border-box;
+}
+
+.navbar a{
+    color:white;
+    text-decoration:none;
+    font-size:16px;
+}
+
+.navbar a:hover{
+    border-bottom:2px solid white;
+}
+
+/* Page Content */
+.page-content{
+    padding-top:90px;
+}
+
+/* Title */
+.title{
+    text-align:center;
+    font-size:32px;
+    font-weight:bold;
+    margin-bottom:25px;
+}
+
+/* Search Section */
+.search-container{
+    text-align:center;
+    margin:15px 0 25px 0;
+}
+
+.search-container input{
+    width:180px;
+    padding:10px 14px;
+    margin:0 8px;
+    border:none;
+    outline:none;
+    border-radius:8px;
+    font-family:'Times New Roman', Times, serif;
+    font-size:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Table Container */
+.table-wrapper{
+    width:95%;
+    margin:auto;
+    overflow-x:auto;
+}
+
+.table-container{
+    background:white;
+    border-radius:14px;
+    padding:20px;
+    box-shadow:0px 0px 20px rgba(0,0,0,0.35);
+}
+
+/* Table */
+table{
+    width:100%;
+    border-collapse:collapse;
+    color:black;
+    overflow:hidden;
+    border-radius:10px;
+}
+
+th{
+    background:#071f2b;
+    color:white;
+    padding:14px 10px;
+    font-size:16px;
+}
+
+td{
+    padding:14px 10px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+    font-size:15px;
+}
+
+tr:hover{
+    background:#f7f7f7;
+}
+
+/* Status Badge */
+.status-ok{
+    color:#1f7a1f;
+    font-weight:bold;
+    background:#e7f7e7;
+    padding:6px 12px;
+    border-radius:20px;
+    display:inline-block;
+}
+
+.status-bad{
+    color:#c62828;
+    font-weight:bold;
+    background:#fdeaea;
+    padding:6px 12px;
+    border-radius:20px;
+    display:inline-block;
+}
+
+/* Risk Badge */
+.risk-low{
+    color:#1b5e20;
+    background:#e8f5e9;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.risk-medium{
+    color:#e65100;
+    background:#fff3e0;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.risk-high{
+    color:#b71c1c;
+    background:#ffebee;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
+    display:inline-block;
+}
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/detection">Detection</a>
+    <a href="/database">Database</a>
+    <a href="https://en.wikipedia.org/wiki/Brain_tumor" target="_blank">About</a>
+</nav>
+
+<div class="page-content">
+
+    <div class="title">PATIENT DETAILS</div>
+
+    <div class="search-container">
+        <input type="text" id="nameSearch" placeholder="Search Name..." onkeyup="searchTable()">
+        <input type="text" id="ageSearch" placeholder="Search Age..." onkeyup="searchTable()">
+        <input type="text" id="dateSearch" placeholder="Search Scan Date..." onkeyup="searchTable()">
+    </div>
+
+    <div class="table-wrapper">
+        <div class="table-container">
+            <table id="patientTable">
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Age</th>
+                    <th>Scan Date</th>
+                    <th>Status</th>
+                    <th>Tumor Type</th>
+                    <th>Detected Regions</th>
+                    <th>Confidence</th>
+                    <th>Estimated Risk Level</th>
+                    <th>Estimated Tumor Region (%)</th>
+                </tr>
+
+                {% for r in reports %}
+                <tr>
+                    <td>{{ r.patient_name }}</td>
+                    <td>{{ r.age }}</td>
+                    <td>{{ r.scan_date }}</td>
+
+                    <td>
+                        {% if r.status == "No Tumor Detected" %}
+                            <span class="status-ok">✔ {{ r.status }}</span>
+                        {% else %}
+                            <span class="status-bad">⚠ {{ r.status }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td>{{ r.tumor_type }}</td>
+                    <td>{{ r.detected_regions }}</td>
+                    <td>{{ r.confidence }}%</td>
+
+                    <td>
+                        {% if r.estimated_risk_level == "Low" %}
+                            <span class="risk-low">{{ r.estimated_risk_level }}</span>
+                        {% elif r.estimated_risk_level == "Medium" %}
+                            <span class="risk-medium">{{ r.estimated_risk_level }}</span>
+                        {% else %}
+                            <span class="risk-high">{{ r.estimated_risk_level }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td>{{ r.estimated_tumor_region_percentage }}%</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+function searchTable(){
+    let nameInput = document.getElementById("nameSearch").value.toLowerCase();
+    let ageInput = document.getElementById("ageSearch").value.toLowerCase();
+    let dateInput = document.getElementById("dateSearch").value.toLowerCase();
+    let table = document.getElementById("patientTable");
+    let tr = table.getElementsByTagName("tr");
+
+    for(let i = 1; i < tr.length; i++){
+        let tdName = tr[i].getElementsByTagName("td")[0];
+        let tdAge = tr[i].getElementsByTagName("td")[1];
+        let tdDate = tr[i].getElementsByTagName("td")[2];
+
+        if(tdName && tdAge && tdDate){
+            let nameText = tdName.textContent.toLowerCase();
+            let ageText = tdAge.textContent.toLowerCase();
+            let dateText = tdDate.textContent.toLowerCase();
+
+            if(nameText.includes(nameInput) &&
+               ageText.includes(ageInput) &&
+               dateText.includes(dateInput)){
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>

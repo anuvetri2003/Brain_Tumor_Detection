@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Result</title>
+<style>
+body{
+    margin:0;
+    font-family:'Times New Roman', Times, serif;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* NAVBAR */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    padding:15px 40px;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(10px);
+    display:flex;
+    gap:30px;
+    z-index:1000;
+    box-sizing:border-box;
+}
+
+.navbar a{
+    color:white;
+    text-decoration:none;
+    font-size:16px;
+}
+
+.navbar a:hover{
+    border-bottom:2px solid white;
+}
+
+/* Background */
+#bgVideo{
+    position:fixed;
+    top:0;
+    left:0;
+    min-width:100%;
+    min-height:100%;
+    object-fit:cover;
+    z-index:-2;
+    filter:blur(2px) brightness(0.6);
+}
+
+/* Result Box */
+.result-glass{
+    width:1000px;
+    margin-top:80px;
+    padding:30px;
+    text-align:center;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(20px);
+    border-radius:20px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+
+.result-details h2{
+    font-size: 18px;
+}
+
+.image-row{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.image-card{
+    width:280px;
+    padding:10px;
+    background:rgba(255,255,255,0.08);
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+
+.image-card img{
+    width:100%;
+    height:220px;
+    object-fit:contain;
+    border-radius:10px;
+}
+
+.buttons a{
+    text-decoration:none;
+    color:white;
+    padding:10px 22px;
+    border:2px solid white;
+    border-radius:25px;
+    margin:10px;
+    display:inline-block;
+    transition:0.3s;
+}
+
+.buttons a:hover{
+    background:white;
+    color:black;
+}
+
+.result-status{
+    font-size:22px;
+    font-weight:bold;
+    margin:15px 0;
+    color:#00ffcc;
+}
+
+.result-details{
+    margin-top:20px;
+    line-height:2;
+    font-size:18px;
+}
+
+.result-details p{
+    margin:8px 0;
+}
+
+.label{
+    color:#ffffff;
+    font-weight:bold;
+}
+
+.value{
+    color:#ffd166;
+    font-weight:bold;
+}
+
+.note{
+    margin-top:20px;
+    font-size:15px;
+    color:#f5f5f5;
+    font-style:italic;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <a href="/">Home</a>
+    <a href="/detection">Detection</a>
+    <a href="/database">Database</a>
+    <a href="https://en.wikipedia.org/wiki/Brain_tumor" target="_blank">About</a>
+</nav>
+
+<video autoplay muted loop id="bgVideo">
+    <source src="https://cdn.pixabay.com/video/2023/04/15/159049-818026306_large.mp4">
+</video>
+
+<div class="result-glass">
+    <h2>DETECTION RESULT</h2>
+
+    <div class="image-row">
+        <div class="image-card">
+            <h4>Original</h4>
+            <img src="{{ url_for('static', filename=original_image) }}">
+        </div>
+
+        <div class="image-card">
+            <h4>Detected</h4>
+            <img src="{{ url_for('static', filename=result_image) }}">
+        </div>
+
+        <div class="image-card">
+            <h4>Grad-CAM</h4>
+            <img src="{{ url_for('static', filename=gradcam_image) }}">
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="result-status">
+        Status: {{ status }}
+    </div>
+
+    <div class="result-details">
+        <p><span class="label">Patient Name:</span> <span class="value">{{ patient_name }}</span></p>
+        <p><span class="label">Age:</span> <span class="value">{{ age }}</span></p>
+        <p><span class="label">Scan Date:</span> <span class="value">{{ scan_date }}</span></p>
+        <p><span class="label">Tumor Type:</span> <span class="value">{{ tumor_type }}</span></p>
+        <p><span class="label">Confidence:</span> <span class="value">{{ confidence }}%</span></p>
+        <p><span class="label">Detected Regions:</span> <span class="value">{{ regions }}</span></p>
+        <p><span class="label">Estimated Risk Level:</span> <span class="value">{{ estimated_risk_level }}</span></p>
+        <p><span class="label">Estimated Tumor Region (%):</span> <span class="value">{{ estimated_tumor_region_percentage }}%</span></p>
+    </div>
+
+    <div class="note">
+        Note: This result is generated for academic demonstration only and is not a clinical diagnosis.
+    </div>
+
+    <div class="buttons">
+        <a href="{{ url_for('detection') }}">Try Another</a>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('download_report',
+            patient_name=patient_name,
+            age=age,
+            scan_date=scan_date,
+            status=status,
+            tumor_type=tumor_type,
+            confidence=confidence,
+            regions=regions,
+            estimated_risk_level=estimated_risk_level,
+            estimated_tumor_region_percentage=estimated_tumor_region_percentage,
+            original_image=original_image,
+            result_image=result_image,
+            gradcam_image=gradcam_image) }}">
+            Download Report
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

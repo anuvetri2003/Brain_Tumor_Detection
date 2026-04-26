@@ -147,97 +147,97 @@ body{
 </style>
 </head>
 <body>
-<nav class="navbar">
-<a href="/">Home</a>
-<a href="/detection">Detection</a>
-<a href="/database">Database</a>
-<a href="https://en.wikipedia.org/wiki/Brain_tumor" target="_blank">About</a>
-</nav>
-<video autoplay muted loop id="bgVideo">
-<source src="https://cdn.pixabay.com/video/2023/04/15/159049-818026306_large.mp4">
-</video>
-<div class="glass-box">
-<h2>BRAIN TUMOR DETECTION</h2>
-<form method="POST" action="/detect" enctype="multipart/form-data" autocomplete="off">
-<div class="form-row">
-<label>Patient Name :</label>
-<input type="text" name="patient_name" required>
-</div>
-<div class="form-row">
-<label>Age :</label>
-<input type="number" name="age" required>
-</div>
-<div class="form-row">
-<label>Scan Date :</label>
-<input type="date" name="scan_date" required>
-</div>
-<div class="upload-box" id="dropBox">
-<span id="uploadText">Drag & Drop MRI Image<br>or Click to Upload</span>
-<input type="file" id="fileInput" name="mri_image" accept="image/*" required>
-</div>
-<div class="progress-container">
-<div class="progress-bar" id="progressBar"></div>
-</div>
-<p id="fileName" style="margin-top:10px;"></p>
-<button type="submit" class="detect-btn" id="detectBtn" disabled> Detect Tumor </button>
-</form>
-</div>
-<script>
-const fileInput = document.getElementById("fileInput");
-const uploadText = document.getElementById("uploadText");
-const dropBox = document.getElementById("dropBox");
-const progressBar = document.getElementById("progressBar");
-const detectBtn = document.getElementById("detectBtn");
-/* Progress Animation */
-function startProgress(){
-    detectBtn.disabled = true;
-    let progress = 0;
-    progressBar.style.width = "0%";
-    let interval = setInterval(function(){
-    progress += 10;
-    progressBar.style.width = progress + "%";
-    if(progress >= 100){
-    clearInterval(interval);
-    detectBtn.disabled = false;
-    }
-    },150);
-}
-/* File select */
-fileInput.addEventListener("change",function(){
-if(this.files.length > 0){
-let name = this.files[0].name;
-uploadText.innerText = "Selected File: " + name;
-startProgress();
-}
-});
-/* Drag Over */
-dropBox.addEventListener("dragover",function(e){
-e.preventDefault();
-dropBox.classList.add("dragover");
-});
-/* Drag Leave */
-dropBox.addEventListener("dragleave",function(){
-dropBox.classList.remove("dragover");
-});
-/* Drop */
-dropBox.addEventListener("drop",function(e){
-e.preventDefault();
-dropBox.classList.remove("dragover");
-fileInput.files = e.dataTransfer.files;
-let name = fileInput.files[0].name;
-uploadText.innerText = "Selected File: " + name;
-startProgress();
-});
-/* Reset form after submit */
-document.querySelector("form").addEventListener("submit",function(){
-setTimeout(function(){
-document.querySelector("form").reset();
-},1000);
-});
-/* Reset when page loads (Fix for browser back button) */
-window.onload = function(){
-document.querySelector("form").reset();
-}
-</script>
+    <nav class="navbar">
+        <a href="/">Home</a>
+        <a href="/detection">Detection</a>
+        <a href="/database">Database</a>
+        <a href="https://en.wikipedia.org/wiki/Brain_tumor" target="_blank">About</a>
+    </nav>
+    <video autoplay muted loop id="bgVideo">
+        <source src="https://cdn.pixabay.com/video/2023/04/15/159049-818026306_large.mp4">
+    </video>
+    <div class="glass-box">
+        <h2>BRAIN TUMOR DETECTION</h2>
+        <form method="POST" action="/detect" enctype="multipart/form-data" autocomplete="off">
+            <div class="form-row">
+                <label>Patient Name :</label>
+                <input type="text" name="patient_name" required>
+            </div>
+            <div class="form-row">
+                <label>Age :</label>
+                <input type="number" name="age" required>
+            </div>
+            <div class="form-row">
+                <label>Scan Date :</label>
+                <input type="date" name="scan_date" required>
+            </div>
+            <div class="upload-box" id="dropBox">
+                <span id="uploadText">Drag & Drop MRI Image<br>or Click to Upload</span>
+                <input type="file" id="fileInput" name="mri_image" accept="image/*" required>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <p id="fileName" style="margin-top:10px;"></p>
+            <button type="submit" class="detect-btn" id="detectBtn" disabled> Detect Tumor </button>
+        </form>
+    </div>
+    <script>
+        const fileInput = document.getElementById("fileInput");
+        const uploadText = document.getElementById("uploadText");
+        const dropBox = document.getElementById("dropBox");
+        const progressBar = document.getElementById("progressBar");
+        const detectBtn = document.getElementById("detectBtn");
+        /* Progress Animation */
+        function startProgress(){
+            detectBtn.disabled = true;
+            let progress = 0;
+            progressBar.style.width = "0%";
+            let interval = setInterval(function(){
+            progress += 10;
+            progressBar.style.width = progress + "%";
+            if(progress >= 100){
+            clearInterval(interval);
+            detectBtn.disabled = false;
+            }
+            },150);
+        }
+        /* File select */
+        fileInput.addEventListener("change",function(){
+            if(this.files.length > 0){
+            let name = this.files[0].name;
+            uploadText.innerText = "Selected File: " + name;
+            startProgress();
+            }
+        });
+        /* Drag Over */
+        dropBox.addEventListener("dragover",function(e){
+            e.preventDefault();
+            dropBox.classList.add("dragover");
+        });
+        /* Drag Leave */
+        dropBox.addEventListener("dragleave",function(){
+            dropBox.classList.remove("dragover");
+        });
+        /* Drop */
+        dropBox.addEventListener("drop",function(e){
+            e.preventDefault();
+            dropBox.classList.remove("dragover");
+            fileInput.files = e.dataTransfer.files;
+            let name = fileInput.files[0].name;
+            uploadText.innerText = "Selected File: " + name;
+            startProgress();
+        });
+        /* Reset form after submit */
+        document.querySelector("form").addEventListener("submit",function(){
+            setTimeout(function(){
+            document.querySelector("form").reset();
+            },1000);
+        });
+        /* Reset when page loads (Fix for browser back button) */
+        window.onload = function(){
+            document.querySelector("form").reset();
+        }
+    </script>
 </body>
 </html>
